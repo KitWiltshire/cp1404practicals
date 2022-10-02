@@ -3,9 +3,9 @@ CP1404/CP5632 - Practical
 Password checker "skeleton" code to help you get started
 """
 
-MIN_LENGTH = 2
-MAX_LENGTH = 6
-SPECIAL_CHARS_REQUIRED = False
+MIN_LENGTH = 5
+MAX_LENGTH = 15
+SPECIAL_CHARS_REQUIRED = True
 SPECIAL_CHARACTERS = "!@#$%^&*()_-=+`~,./'[]<>?{}|\\"
 
 
