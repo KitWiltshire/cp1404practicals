@@ -1,27 +1,27 @@
-# """File reading"""
-#
-# total = 0
-# line_number = 0
-# error_line_numbers = []
-# filename = input("Filename: ")
-# in_file = open(filename, "r")
-# # for line in in_file:
-# #     if line[0] == "a":
-# #         print(repr(line))
-# #         print(line.strip())
-# # for line in in_file:
-# #     if line.startswith("a"):
-# #         print(repr(line))
-# #         print(line.strip())
-# for line in in_file:
-#     line_number += 1
-#     try:
-#         total += float(line)
-#         print(line)
-#     except ValueError:
-#         print(f"error on line {line_number}")
-#         error_line_numbers += 1
-#
+"""File reading"""
+
+total = 0
+line_number = 0
+error_line_numbers = []
+filename = input("Filename: ")
+in_file = open(filename, "r")
+for line in in_file:
+    if line[0] == "a":
+        print(repr(line))
+        print(line.strip())
+for line in in_file:
+    if line.startswith("a"):
+        print(repr(line))
+        print(line.strip())
+for line in in_file:
+    line_number += 1
+    try:
+        total += float(line)
+        print(line)
+    except ValueError:
+        print(f"error on line {line_number}")
+        error_line_numbers += 1
+
 #
 # print(total, line_number, error_line_numbers)
 # in_file.close()
