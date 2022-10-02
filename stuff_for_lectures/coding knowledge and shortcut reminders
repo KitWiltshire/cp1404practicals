@@ -1,0 +1,6 @@
+ctrl + /  comments a line
+2 ** 10 is 2 to the power of 10
+7 % 2 finds the remainder when 7 is divided by 2
+ctrl d duplicates a line
+"This and that other thing".split()
+>>> ['This', 'and', 'that', 'other', 'thing']
