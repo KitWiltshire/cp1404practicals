@@ -22,28 +22,28 @@ for line in in_file:
         print(f"error on line {line_number}")
         error_line_numbers += 1
 
-#
-# print(total, line_number, error_line_numbers)
-# in_file.close()
 
-# s = "\tPython, Monty  \n"
-# print(s[1], ".", sep="")
-# print(s.strip(), ".", sep="")
-# s.replace(' ', '*')
-# print(s.lstrip(), ".", sep="")
-# print(s.strip().split(','))
-#
-# name = input("Name: ")
-# out_file = open("minecraft.txt", "w")
-# print(name, file=out_file)
-# out_file.close()
+print(total, line_number, error_line_numbers)
+in_file.close()
 
-# file_name = ["Epic", "Bonkers", "Diabolical"]
-# # out_file = str(open(file_name, "w"))
-# # file_name = input("Name: ")
-# # if file_name == "bob":
-# with open("bob.txt", "w") as out_file:
-#     print(file_name, file=out_file)
+s = "\tPython, Monty  \n"
+print(s[1], ".", sep="")
+print(s.strip(), ".", sep="")
+s.replace(' ', '*')
+print(s.lstrip(), ".", sep="")
+print(s.strip().split(','))
+
+name = input("Name: ")
+out_file = open("minecraft.txt", "w")
+print(name, file=out_file)
+out_file.close()
+
+file_name = ["Epic", "Bonkers", "Diabolical"]
+# out_file = str(open(file_name, "w"))
+# file_name = input("Name: ")
+# if file_name == "bob":
+with open("bob.txt", "w") as out_file:
+    print(file_name, file=out_file)
 
 
 strings = ["a", "b", "c"]
