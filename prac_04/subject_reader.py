@@ -11,6 +11,7 @@ def main():
     print(data)
     display_subject_data(data)
 
+
 def get_data():
     """Read data from file formatted like: subject,lecturer,number of students."""
     input_file = open(FILENAME)
@@ -28,9 +29,11 @@ def get_data():
     input_file.close()
     return subject_data
 
+
 def display_subject_data(data):
     for subject in range(0, len(data)):
         # print(f"{data[subject]:<} is taught by {data[subject + 1]:<12} and has {data[subject + 2]:>3} students")
         print(f"{data[subject][0]} is taught by {data[subject][1]:<12} and has {data[subject][2]:>3} students")
+
 
 main()
