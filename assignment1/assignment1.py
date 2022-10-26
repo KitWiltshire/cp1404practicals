@@ -21,7 +21,8 @@ def main():
     if menu_input == "D":
         print(initial_movies_content)
     elif menu_input == "A":
-        add_new_movie(CATEGORIES)
+        new_movie = add_new_movie(CATEGORIES)
+        print(new_movie)
 
 
 
@@ -41,7 +42,6 @@ def get_valid_menu_input():
 
 
 def add_new_movie(CATEGORIES):
-    movies = []
     movie_title = input("Title: ")
     while movie_title == "":
         print("Input can not be blank")
@@ -64,6 +64,8 @@ def add_new_movie(CATEGORIES):
         print("Invalid category; using Other")
         movie_category = "Other"
     print(f"{movie_title} ({movie_category} from {movie_year}) added to movie list")
+    new_movie = f"{movie_title},{movie_year},{movie_category},u"
+    return new_movie
 
 
 if __name__ == '__main__':
