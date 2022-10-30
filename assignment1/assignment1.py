@@ -15,16 +15,38 @@ def main():
     movies_content = movies_backup_file.read()
     movies_file.write(movies_content)
     movies_backup_file.close()
-
     while menu_input != "Q":
         if menu_input == "D":
-            print(movies_content)
+            movies_file.seek(0)
+            movies_list = movies_file.readlines()
+            print(movies_list)
+            for movie in range(len(movies_list)):
+                print(f"{movie+1}. {movies_list[movie]}", end="")
+            #TODO: count the movies watched and movies unwatched and print it out
         elif menu_input == "A":
             new_movie = add_new_movie()
             movies_file.write(f"\n{new_movie}")
             movies_file.seek(0)
             movies_content = movies_file.read()
+        else: #when the user presses "w"
+            print("Enter the number of a movie to mark as watched")
+            try:
+                movie_to_watch = int(input(">>> "))
+                while movie_to_watch != int and movie_to_watch < 1:
+                    if movie_to_watch == "":
+                        print("Input can not be blank")
+                    elif movie_to_watch < 1:
+                        print("Number must be >= 1")
+                    elif movie_to_watch > len(movies_list):
+                        print("Invalid movie number")
+                    movie_to_watch = int(input(">>> "))
+            except ValueError:
+                print("Invalid input; enter a valid number")
+                movie_to_watch = input(">>> ")
+            #TODO: do an if statement for when a movie has already been watched and also turn a movie that hasn't been watched into a watched one
+
         menu_input = get_valid_menu_input()
+
     print("Have a nice day :)")
     movies_file.close()
 
