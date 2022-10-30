@@ -8,31 +8,36 @@ GitHub URL:
 def main():
     """This function will be in charge of the whole program with other functions inside that do the complex
     things """
-    CATEGORIES = ["Action", "Comedy", "Documentary", "Drama", "Thriller", "Other"]
     print("Movies To Watch 1.0 - by Kit Wiltshire")
-    MENU = "D - Display movies \nA - Add new movie \nW - Watch a movie \nQ - Quit"
-    print(MENU)
     menu_input = get_valid_menu_input()
-    movies_backup_file = open("movies_backup.csv", "r")
-    movies_file = open("movies.csv", "w")
-    initial_movies_content = movies_backup_file.read()
-    movies_file.write(initial_movies_content)
-    print(initial_movies_content)
-    if menu_input == "D":
-        print(initial_movies_content)
-    elif menu_input == "A":
-        new_movie = add_new_movie(CATEGORIES)
-        print(new_movie)
+    movies_backup_file = open("movies_backup.csv", "r+")
+    movies_file = open("movies.csv", "w+")
+    movies_content = movies_backup_file.read()
+    movies_file.write(movies_content)
+    movies_backup_file.close()
 
+    while menu_input != "Q":
+        if menu_input == "D":
+            print(movies_content)
+        elif menu_input == "A":
+            new_movie = add_new_movie()
+            movies_file.write(f"\n{new_movie}")
+            movies_file.seek(0)
+            movies_content = movies_file.read()
+        menu_input = get_valid_menu_input()
+    print("Have a nice day :)")
+    movies_file.close()
 
 
 def get_valid_menu_input():
     """Will ask for a valid response in the menu"""
+    print("Menu:\nD - Display movies \nA - Add new movie \nW - Watch a movie \nQ - Quit")
     menu_input = input(">>> ").upper()
     while menu_input != "D" and menu_input != "A" and menu_input != "W" and menu_input != "Q":
         print("Invalid menu choice")
         menu_input = input(">>> ").upper()
     return menu_input
+
 
 # name = input("Name: ")
 # out_file = open("minecraft.txt", "w")
@@ -41,7 +46,8 @@ def get_valid_menu_input():
 # out_file.close()
 
 
-def add_new_movie(CATEGORIES):
+def add_new_movie():
+    CATEGORIES = ["Action", "Comedy", "Documentary", "Drama", "Thriller", "Other"]
     movie_title = input("Title: ")
     while movie_title == "":
         print("Input can not be blank")
