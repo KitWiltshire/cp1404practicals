@@ -30,7 +30,7 @@ def main():
             #TODO: count the movies watched and movies unwatched and print it out
         elif menu_input == "A":
             new_movie = add_new_movie()
-            movies_file.write(f"\n{new_movie}")
+            movies_file.write(new_movie)
             movies_file.seek(0)
             movies_content = movies_file.read()
         else: #when the user presses "w"
@@ -69,6 +69,7 @@ def update_movies(movies_content, movies_file):
     for movie in line_list:
         movies_list.append(movie.split(","))
     movies_list.sort(key=lambda year: year[1]) #TODO: make it actually sort it right
+    movies_file.seek(0)
     movies_file.truncate(0)
     for movie in movies_list:
         movies_file.write(f"{movie[0]},{movie[1]},{movie[2]},{movie[3]}\n")
