@@ -70,7 +70,7 @@ def update_movies(movies_content, movies_file):
     movies_list = []
     for movie in line_list:
         movies_list.append(movie.split(","))
-    movies_list.sort(key=lambda year: year[1]) #TODO: make it actually sort it right
+    movies_list.sort(key=lambda year: int(year[1])) #TODO: make it actually sort it right
     movies_file.seek(0)
     movies_file.truncate(0)
     for movie in movies_list:
