@@ -15,6 +15,7 @@ def main():
     movies_content = movies_backup_file.read()
     movies_file.write(movies_content)
     movies_backup_file.close()
+    movies_file, movies_list = update_movies(movies_content, movies_file)
     while menu_input != "Q":
         movies_file, movies_list = update_movies(movies_content, movies_file) #I dont know whats happening
         if menu_input == "D":
@@ -57,6 +58,7 @@ def main():
             #TODO: do an if statement for when a movie has already been watched and also turn a movie that hasn't been watched into a watched one
         menu_input = get_valid_menu_input()
     print("Have a nice day :)")
+    movies_file, movies_list = update_movies(movies_content, movies_file)
     movies_file.close()
 
 
