@@ -16,12 +16,17 @@ def main():
     movies_file.write(movies_content)
     movies_backup_file.close()
     while menu_input != "Q":
+        movies_file, movies_list = update_movies(movies_content, movies_file) #I dont know whats happening
         if menu_input == "D":
-            movies_file.seek(0)
-            movies_list = movies_file.readlines()
-            print(movies_list)
             for movie in range(len(movies_list)):
-                print(f"{movie+1}. {movies_list[movie]}", end="")
+                if movies_list[movie][3] == "u":
+                    print(f"{movie+1}. * {movies_list[movie][0]} - {movies_list[movie][1]} ({movies_list[movie][2]})")
+                else:
+                    print(f"{movie + 1}. {movies_list[movie][0]} - {movies_list[movie][1]} ({movies_list[movie][2]})")
+            # for movie in movies_list:
+                # for element in movie:
+                    # print(element)
+                # print(f"{movie+1}. {movies_list[movie]}") #HOW DO YOU SELECT A SPECIFIC ELEMENT FROM A LIST
             #TODO: count the movies watched and movies unwatched and print it out
         elif menu_input == "A":
             new_movie = add_new_movie()
@@ -43,12 +48,29 @@ def main():
             except ValueError:
                 print("Invalid input; enter a valid number")
                 movie_to_watch = input(">>> ")
+            if movies_list[movie_to_watch-1][3] == "w":
+                print(f"{movies_list[movie_to_watch-1][0]} from {movies_list[movie_to_watch-1][1]} watched")
+            else:
+                pass
+
             #TODO: do an if statement for when a movie has already been watched and also turn a movie that hasn't been watched into a watched one
-
         menu_input = get_valid_menu_input()
-
     print("Have a nice day :)")
     movies_file.close()
+
+
+def update_movies(movies_content, movies_file):
+    movies_file.seek(0)
+    line_list = movies_file.readlines()
+    line_list = movies_content.split("\n")
+    print(line_list)
+    movies_list = []
+    for movie in line_list:
+        movies_list.append(movie.split(","))
+    movies_list.sort(key=lambda year: year[1]) #TODO: make it actually sort it right
+    print(movies_list)
+
+    return movies_file, movies_list
 
 
 def get_valid_menu_input():
@@ -84,7 +106,7 @@ def add_new_movie():
             movie_year = int(input("Year: "))
     except ValueError:
         print("Invalid input; enter a valid number")
-        movie_year = input("Year: ")
+        movie_year = int(input("Year: "))
     # TODO: Fix the code so it will continue to ask for a year if the input is not a number
     print(f"Categories available: {CATEGORIES}")
     movie_category = input("Category: ").capitalize()
