@@ -51,7 +51,7 @@ def main():
             if movies_list[movie_to_watch-1][3] == "w":
                 print(f"{movies_list[movie_to_watch-1][0]} from {movies_list[movie_to_watch-1][1]} watched")
             else:
-                pass
+                movies_list[movie_to_watch-1][3] = "w"
 
             #TODO: do an if statement for when a movie has already been watched and also turn a movie that hasn't been watched into a watched one
         menu_input = get_valid_menu_input()
