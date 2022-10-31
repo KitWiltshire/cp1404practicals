@@ -22,7 +22,7 @@ def main():
                 if movies_list[movie][3] == "u":
                     print(f"{movie+1}. * {movies_list[movie][0]} - {movies_list[movie][1]} ({movies_list[movie][2]})")
                 else:
-                    print(f"{movie + 1}. {movies_list[movie][0]} - {movies_list[movie][1]} ({movies_list[movie][2]})")
+                    print(f"{movie + 1}.   {movies_list[movie][0]} - {movies_list[movie][1]} ({movies_list[movie][2]})")
             # for movie in movies_list:
                 # for element in movie:
                     # print(element)
@@ -52,6 +52,7 @@ def main():
                 print(f"{movies_list[movie_to_watch-1][0]} from {movies_list[movie_to_watch-1][1]} watched")
             else:
                 movies_list[movie_to_watch-1][3] = "w"
+                movies_file.seek(movie_to_watch)
 
             #TODO: do an if statement for when a movie has already been watched and also turn a movie that hasn't been watched into a watched one
         menu_input = get_valid_menu_input()
@@ -68,6 +69,9 @@ def update_movies(movies_content, movies_file):
     for movie in line_list:
         movies_list.append(movie.split(","))
     movies_list.sort(key=lambda year: year[1]) #TODO: make it actually sort it right
+    movies_file.truncate(0)
+    for movie in movies_list:
+        movies_file.write(f"{movie[0]},{movie[1]},{movie[2]},{movie[3]}\n")
     print(movies_list)
 
     return movies_file, movies_list
