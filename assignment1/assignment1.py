@@ -3,38 +3,46 @@ Name: Kit Wiltshire
 Date started: 24/10/2022
 GitHub URL:
 """
+MOVIE_FILE = "movies.csv"
+MENU_STRING = "Menu:\nD - Display movies \nA - Add new movie \nW - Watch a movie \nQ - Quit"
+
+# CONSTANTS FOR MOVIES
+WATCHED = "w"
+NOT_WATCHED = "u"
+TITLE_INDEX = 0
+YEAR_INDEX = 1
+GENRE_INDEX = 2
+WATCHED_INDEX = 3
 
 
 def main():
     """This function will be in charge of the whole program with other functions inside that do the complex
     things """
     print("Movies To Watch 1.0 - by Kit Wiltshire")
+    # Read Content
+    movie_list = get_movie_list()
+    movie_list.sort(key=lambda year: year[1])  # Sort the list by movie
     menu_input = get_valid_menu_input()
-    movies_backup_file = open("movies_backup.csv", "r+")
-    movies_file = open("movies.csv", "w+")
-    movies_content = movies_backup_file.read()
-    movies_file.write(movies_content)
-    movies_backup_file.close()
-    movies_file, movies_list = update_movies(movies_content, movies_file)
     while menu_input != "Q":
-        movies_file, movies_list = update_movies(movies_content, movies_file) #I dont know whats happening
+        # movie_list.sort(key=lambda year: year[1])  # Sort the list by movie
         if menu_input == "D":
-            for movie in range(len(movies_list)):
-                if movies_list[movie][3] == "u":
-                    print(f"{movie+1}. * {movies_list[movie][0]} - {movies_list[movie][1]} ({movies_list[movie][2]})")
+            for index, movie in enumerate(movie_list):
+                if movie[WATCHED_INDEX] == NOT_WATCHED:
+                    print(f"{index + 1}. * {movie[TITLE_INDEX]} - {movie[YEAR_INDEX]} ({movie[GENRE_INDEX]})")
                 else:
-                    print(f"{movie + 1}.   {movies_list[movie][0]} - {movies_list[movie][1]} ({movies_list[movie][2]})")
-            # for movie in movies_list:
-                # for element in movie:
-                    # print(element)
-                # print(f"{movie+1}. {movies_list[movie]}") #HOW DO YOU SELECT A SPECIFIC ELEMENT FROM A LIST
-            #TODO: count the movies watched and movies unwatched and print it out
+                    print(f"{index + 1}.   {movie[TITLE_INDEX]} - {movie[YEAR_INDEX]} ({movie[GENRE_INDEX]})")
+            # TODO: count the movies watched and movies unwatched and print it out
         elif menu_input == "A":
             new_movie = add_new_movie()
-            movies_file.write(new_movie)
-            movies_file.seek(0)
-            movies_content = movies_file.read()
-        else: #when the user presses "w"
+            print(new_movie)
+            new_movie.split(",")
+            print(new_movie)
+            new_movie[YEAR_INDEX] = int(new_movie[YEAR_INDEX])
+            movie_list.append(new_movie)
+            print(movie_list)
+            # movie_list.seek(0)
+            # movies_content = movie_list.read()
+        else:  # when the user presses "w"
             print("Enter the number of a movie to mark as watched")
             try:
                 movie_to_watch = int(input(">>> "))
@@ -43,46 +51,53 @@ def main():
                         print("Input can not be blank")
                     elif movie_to_watch < 1:
                         print("Number must be >= 1")
-                    elif movie_to_watch > len(movies_list):
+                    elif movie_to_watch > len(movie_list):
                         print("Invalid movie number")
                     movie_to_watch = int(input(">>> "))
             except ValueError:
                 print("Invalid input; enter a valid number")
                 movie_to_watch = input(">>> ")
-            if movies_list[movie_to_watch-1][3] == "w":
-                print(f"{movies_list[movie_to_watch-1][0]} from {movies_list[movie_to_watch-1][1]} watched")
+            if movie_list[movie_to_watch - 1][3] == "w":
+                print(f"{movie_list[movie_to_watch - 1][0]} from {movie_list[movie_to_watch - 1][1]} watched")
             else:
-                movies_list[movie_to_watch-1][3] = "w"
-                movies_file.seek(movie_to_watch)
+                print("bruh")
+                movie_list[movie_to_watch - 1][3] = "w"
+                print(movie_list[movie_to_watch - 1])
+                print(movie_list)
+                # file.seek(0)
+                # movies_file.truncate(0)
+                # for movie in movie_list:
+                #     movies_file.write(f"{movie[0]},{movie[1]},{movie[2]},{movie[3]}\n")
 
-            #TODO: do an if statement for when a movie has already been watched and also turn a movie that hasn't been watched into a watched one
+            # TODO: do an if statement for when a movie has already been watched and also turn a movie that hasn't been watched into a watched one
         menu_input = get_valid_menu_input()
     print("Have a nice day :)")
-    movies_file, movies_list = update_movies(movies_content, movies_file)
-    movies_file.close()
+    # movies_file, movie_list = update_movies(movies_content, movies_file)
+    # movies_file.close()
 
 
-def update_movies(movies_content, movies_file):
-    movies_file.seek(0)
-    line_list = movies_file.readlines()
-    line_list = movies_content.split("\n")
-    print(line_list)
-    movies_list = []
-    for movie in line_list:
-        movies_list.append(movie.split(","))
-    movies_list.sort(key=lambda year: int(year[1]))
-    movies_file.seek(0)
-    movies_file.truncate(0)
-    for movie in movies_list:
-        movies_file.write(f"{movie[0]},{movie[1]},{movie[2]},{movie[3]}\n")
-    print(movies_list)
+def get_movie_list():
+    """ Open the movie file and copy to a list of lists"""
+    backup_file = open("movies_backup.csv", 'r')
+    backup_file_content = backup_file.read()
+    file = open(MOVIE_FILE, "r+")
+    file_content = file.readlines()
+    print(file_content)
+    file.close()
 
-    return movies_file, movies_list
+    movie_list = []
+    for line in file_content:
+        line = line.strip("\n")
+        line = line.split(",")
+        line[YEAR_INDEX] = int(line[YEAR_INDEX])
+        movie_list.append(line)
+
+    return movie_list
 
 
 def get_valid_menu_input():
     """Will ask for a valid response in the menu"""
-    print("Menu:\nD - Display movies \nA - Add new movie \nW - Watch a movie \nQ - Quit")
+    print(MENU_STRING)
     menu_input = input(">>> ").upper()
     while menu_input != "D" and menu_input != "A" and menu_input != "W" and menu_input != "Q":
         print("Invalid menu choice")
@@ -103,17 +118,31 @@ def add_new_movie():
     while movie_title == "":
         print("Input can not be blank")
         movie_title = input("Title: ")
-    try:
-        movie_year = int(input("Year: "))
-        while movie_year != int and movie_year < 1:
+    valid_year_input = False
+    while not valid_year_input:
+        try:
+            movie_year = int(input("Year: "))
             if movie_year == "":
                 print("Input can not be blank")
             elif movie_year < 1:
                 print("Number must be >= 1")
-            movie_year = int(input("Year: "))
-    except ValueError:
-        print("Invalid input; enter a valid number")
-        movie_year = int(input("Year: "))
+            else:
+                valid_year_input = True
+        except ValueError:
+            print("Invalid input; enter a valid number")
+    # valid_year_input = False
+    # while not valid_year_input:
+    #     try:
+    #         movie_year = int(input("Year: "))
+    #         valid_year_input = True
+    #         if movie_year < 1:
+    #             print("Number must be >= 1")
+    #             valid_year_input = False
+    #     except ValueError:
+    #         print("Invalid input; enter a valid number")
+    #     except None:
+    #         print("Input can not be blank")
+
     # TODO: Fix the code so it will continue to ask for a year if the input is not a number
     print(f"Categories available: {CATEGORIES}")
     movie_category = input("Category: ").capitalize()
@@ -127,3 +156,5 @@ def add_new_movie():
 
 if __name__ == '__main__':
     main()
+
+    # main()
