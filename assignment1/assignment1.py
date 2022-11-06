@@ -32,13 +32,17 @@ def main():
                 else:
                     print(f"{index + 1}.   {movie[TITLE_INDEX]} - {movie[YEAR_INDEX]} ({movie[GENRE_INDEX]})")
             # TODO: count the movies watched and movies unwatched and print it out
+
         elif menu_input == "A":
             new_movie = add_new_movie()
             print(new_movie)
-            new_movie.split(",")
+            # new_movie = [new_movie]
+            new_movie = new_movie.split(",")
             print(new_movie)
+            print(movie_list)
             new_movie[YEAR_INDEX] = int(new_movie[YEAR_INDEX])
             movie_list.append(new_movie)
+            movie_list.sort(key=lambda year: year[1])
             print(movie_list)
             # movie_list.seek(0)
             # movies_content = movie_list.read()
@@ -51,9 +55,9 @@ def main():
                         print("Input can not be blank")
                     elif movie_to_watch < 1:
                         print("Number must be >= 1")
-                    elif movie_to_watch > len(movie_list):
-                        print("Invalid movie number")
-                    movie_to_watch = int(input(">>> "))
+            except IndexError:
+                print("Invalid movie number")
+                movie_to_watch = int(input(">>> "))
             except ValueError:
                 print("Invalid input; enter a valid number")
                 movie_to_watch = input(">>> ")
@@ -88,7 +92,9 @@ def get_movie_list():
     movie_list = []
     for line in file_content:
         line = line.strip("\n")
+        # print(line)
         line = line.split(",")
+        # print(line)
         line[YEAR_INDEX] = int(line[YEAR_INDEX])
         movie_list.append(line)
 
@@ -157,4 +163,3 @@ def add_new_movie():
 if __name__ == '__main__':
     main()
 
-    # main()
