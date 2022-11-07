@@ -10,7 +10,7 @@ MENU_STRING = "Menu:\nD - Display movies \nA - Add new movie \nW - Watch a movie
 WATCHED = "w"
 NOT_WATCHED = "u"
 TITLE_INDEX = 0
-YEAR_INDEX = 1
+YEAR_INDEX: int = 1
 GENRE_INDEX = 2
 WATCHED_INDEX = 3
 
@@ -24,6 +24,13 @@ def main():
     movie_list.sort(key=lambda year: year[1])  # Sort the list by movie
     menu_input = get_valid_menu_input()
     while menu_input != "Q":
+        movies_watched = 0
+        movies_unwatched = 0
+        for movie in movie_list:
+            if movie[3] == WATCHED:
+                movies_watched += 1
+            else:
+                movies_unwatched += 1
         # movie_list.sort(key=lambda year: year[1])  # Sort the list by movie
         if menu_input == "D":
             for index, movie in enumerate(movie_list):
@@ -33,6 +40,7 @@ def main():
                     print(f"{index + 1}.   {movie[TITLE_INDEX]} - {movie[YEAR_INDEX]} ({movie[GENRE_INDEX]})")
             # TODO: count the movies watched and movies unwatched and print it out
 
+            print(f"{movies_watched} movies watched, {movies_unwatched} movies still to watch.")
         elif menu_input == "A":
             new_movie = add_new_movie()
             print(new_movie)
@@ -47,34 +55,40 @@ def main():
             # movie_list.seek(0)
             # movies_content = movie_list.read()
         else:  # when the user presses "w"
-            print("Enter the number of a movie to mark as watched")
-            try:
-                movie_to_watch = int(input(">>> "))
-                while movie_to_watch != int and movie_to_watch < 1:
-                    if movie_to_watch == "":
-                        print("Input can not be blank")
-                    elif movie_to_watch < 1:
-                        print("Number must be >= 1")
-            except IndexError:
-                print("Invalid movie number")
-                movie_to_watch = int(input(">>> "))
-            except ValueError:
-                print("Invalid input; enter a valid number")
-                movie_to_watch = input(">>> ")
-            if movie_list[movie_to_watch - 1][3] == "w":
-                print(f"{movie_list[movie_to_watch - 1][0]} from {movie_list[movie_to_watch - 1][1]} watched")
+            if movies_watched == len(movie_list):
+                print("No more movies to watch!")
             else:
-                print("bruh")
-                movie_list[movie_to_watch - 1][3] = "w"
-                print(movie_list[movie_to_watch - 1])
-                print(movie_list)
-                # file.seek(0)
-                # movies_file.truncate(0)
-                # for movie in movie_list:
-                #     movies_file.write(f"{movie[0]},{movie[1]},{movie[2]},{movie[3]}\n")
+                movie_to_watch = 0
+                print("Enter the number of a movie to mark as watched")
+                valid_movie_to_watch_input = False
+                while not valid_movie_to_watch_input:
+                    try:
+                        movie_to_watch = int(input(">>> "))
+                        if movie_to_watch == "":
+                            print("Input can not be blank")
+                        elif movie_to_watch > len(movie_list):
+                            print("Invalid movie number")
+                        else:
+                            valid_movie_to_watch_input = True
+                    except ValueError:
+                        print("Invalid input; enter a valid number")
 
-            # TODO: do an if statement for when a movie has already been watched and also turn a movie that hasn't been watched into a watched one
+                try:
+                    if movie_list[movie_to_watch - 1][3] == "w":
+                        print(f"{movie_list[movie_to_watch - 1][0]} from {movie_list[movie_to_watch - 1][1]} watched")
+                    else:
+                        print("bruh")
+                        movie_list[movie_to_watch - 1][3] = "w"
+                        print(movie_list[movie_to_watch - 1])
+                        print(movie_list)
+                except IndexError:
+                    print("Invalid movie number")
         menu_input = get_valid_menu_input()
+    file = open("movies.csv", 'w')
+    file.seek(0)
+    file.truncate(0)
+    for movie in movie_list:
+        file.write(f"{movie[0]},{movie[1]},{movie[2]},{movie[3]}\n")
     print("Have a nice day :)")
     # movies_file, movie_list = update_movies(movies_content, movies_file)
     # movies_file.close()
@@ -136,18 +150,6 @@ def add_new_movie():
                 valid_year_input = True
         except ValueError:
             print("Invalid input; enter a valid number")
-    # valid_year_input = False
-    # while not valid_year_input:
-    #     try:
-    #         movie_year = int(input("Year: "))
-    #         valid_year_input = True
-    #         if movie_year < 1:
-    #             print("Number must be >= 1")
-    #             valid_year_input = False
-    #     except ValueError:
-    #         print("Invalid input; enter a valid number")
-    #     except None:
-    #         print("Input can not be blank")
 
     # TODO: Fix the code so it will continue to ask for a year if the input is not a number
     print(f"Categories available: {CATEGORIES}")
