@@ -16,22 +16,20 @@ WATCHED_INDEX = 3
 
 
 def main():
-    """This function will be in charge of the whole program with other functions inside that do the complex
+    """This function will be in charge of the whole program with other functions inside that do the more complex
     things """
     print("Movies To Watch 1.0 - by Kit Wiltshire")
-    # Read Content
-    movie_list = get_movie_list()
-    movie_list.sort(key=lambda year: year[1])  # Sort the list by movie year
+    movie_list = get_movie_list()  # Read content
+    movie_list.sort(key=lambda year: year[YEAR_INDEX])  # Sort the list by year
     menu_input = get_valid_menu_input()
     while menu_input != "Q":
         movies_watched = 0
         movies_unwatched = 0
         for movie in movie_list:
-            if movie[3] == WATCHED:
+            if movie[3] == WATCHED:  # When the 4th element in the list i.e 'u' or 'w' is watched
                 movies_watched += 1
             else:
                 movies_unwatched += 1
-        # movie_list.sort(key=lambda year: year[1])  # Sort the list by movie
         if menu_input == "D":
             for index, movie in enumerate(movie_list):
                 if movie[WATCHED_INDEX] == NOT_WATCHED:
@@ -39,39 +37,38 @@ def main():
                 else:
                     print(f" {index + 1}.   {movie[TITLE_INDEX]} - {movie[YEAR_INDEX]} ({movie[GENRE_INDEX]})")
             print(f"{movies_watched} movies watched, {movies_unwatched} movies still to watch.")
-        elif menu_input == "A":  # When the user types a
+        elif menu_input == "A":
             new_movie = add_new_movie()
-            new_movie = new_movie.split(",")
-            # new_movie[YEAR_INDEX] = int(new_movie[YEAR_INDEX])
+            new_movie = new_movie.split(",")  # Separates the content in the new movie by the comma to make a list
             movie_list.append(new_movie)
-            movie_list.sort(key=lambda year: year[1])
-            # print(movie_list)
-            # movie_list.seek(0)
-            # movies_content = movie_list.read()
+            movie_list.sort(key=lambda year: year[YEAR_INDEX])
         else:  # when the user presses "w"
-            if movies_watched == len(movie_list):
+            if movies_watched == len(movie_list):  # When the user has watched all the movies
                 print("No more movies to watch!")
             else:
                 movie_to_watch = 0
                 print("Enter the number of a movie to mark as watched")
-                movie_to_watch = watch_valid_movie(movie_list, movie_to_watch)
+                movie_to_watch = watch_movie(movie_list, movie_to_watch)
                 try:
                     if movie_list[movie_to_watch - 1][3] == "w":
-                        print(f"{movie_list[movie_to_watch - 1][0]} from {movie_list[movie_to_watch - 1][1]} watched")
+                        print(f"You have already watched {movie_list[movie_to_watch - 1][TITLE_INDEX]}")
                     else:
                         movie_list[movie_to_watch - 1][3] = "w"
+                        print(f"{movie_list[movie_to_watch - 1][TITLE_INDEX]} from "
+                              f"{movie_list[movie_to_watch - 1][YEAR_INDEX]} watched")
                 except IndexError:
                     print("Invalid movie number")
         menu_input = get_valid_menu_input()
     file = open("movies.csv", 'w')
     for movie in movie_list:
-        file.write(f"{movie[0]},{movie[1]},{movie[2]},{movie[3]}\n")
+        file.write(f"{movie[0]},{movie[1]},{movie[2]},{movie[3]}\n")  # Converts the items from the lists into just text
     file.close()
     print(f"{len(movie_list)} movies saved to {MOVIE_FILE}")
     print("Have a nice day :)")
 
 
-def watch_valid_movie(movie_list, movie_to_watch):
+def watch_movie(movie_list, movie_to_watch):
+    """Will ask the user to watch a movie based on number and only work if the user gives a valid response"""
     valid_movie_to_watch_input = False
     while not valid_movie_to_watch_input:
         try:
@@ -96,7 +93,6 @@ def get_movie_list():
     for line in file_content:
         line = line.strip("\n")
         line = line.split(",")
-        # line[YEAR_INDEX] = int(line[YEAR_INDEX])
         movie_list.append(line)
     return movie_list
 
@@ -112,6 +108,7 @@ def get_valid_menu_input():
 
 
 def add_new_movie():
+    """Function will go through the process of adding a new movie to the list and prevent invalid responses"""
     CATEGORIES = ["Action", "Comedy", "Documentary", "Drama", "Thriller", "Other"]
     movie_title = input("Title: ")
     while movie_title == "":
